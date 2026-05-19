@@ -121,6 +121,89 @@
         html.dark .hover\:bg-slate-50\/80:hover {
             background-color: #1e293b\/40 !important;
         }
+
+        /* ==========================================
+           ANIMASI KUSTOM KEDAP KEDIP (ALARM FLASH WARNING)
+           ========================================== */
+        @keyframes alarm-flash {
+            0%, 100% {
+                background-color: rgba(127, 29, 29, 0.7); /* bg-red-950/70 */
+                border-color: rgba(239, 68, 68, 0.4); /* border-red-500/40 */
+                box-shadow: 0 0 4px rgba(239, 68, 68, 0.2);
+                color: #facc15; /* text-yellow-400 */
+            }
+            50% {
+                background-color: rgba(220, 38, 38, 0.95); /* Merah terang menyala */
+                border-color: #facc15; /* Border kuning neon */
+                box-shadow: 0 0 14px rgba(239, 68, 68, 0.8), 0 0 4px #facc15; /* Pendaran ganda */
+                color: #ffffff; /* Teks putih kontras */
+            }
+        }
+        .animate-alarm {
+            animation: alarm-flash 0.8s infinite ease-in-out;
+        }
+
+        /* ==========================================
+           GLOBAL OVERRIDES SWEETALERT2 (DARK & LIGHT SINKRON)
+           ========================================== */
+        .swal2-popup {
+            border-radius: 28px !important;
+            padding: 2rem !important;
+            font-family: 'Inter', sans-serif !important;
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+            border: 1px solid #f1f5f9 !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;
+        }
+        /* Warna default judul modal light mode */
+        .swal2-title {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+        }
+        /* Judul Input / Label wajib kontras tinggi (Slate 800) di Light Mode */
+        .swal2-html-container label {
+            display: block !important;
+            color: #1e293b !important;
+            font-weight: 700 !important;
+            text-align: left !important;
+            margin-bottom: 0.375rem !important;
+        }
+
+        /* OVERRIDE KHUSUS SAAT SIFAT DARK MODE AKTIF */
+        html.dark .swal2-popup {
+            background-color: #111b33 !important;
+            color: #f1f5f9 !important;
+            border: 1px solid #1e293b !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+        }
+        html.dark .swal2-title {
+            color: #ffffff !important;
+        }
+        html.dark .swal2-html-container {
+            color: #cbd5e1 !important;
+        }
+        /* Glowing Sky Blue Elektrik untuk Label Input di Dark Mode (Sangat Terbaca & Premium!) */
+        html.dark .swal2-html-container label {
+            color: #38bdf8 !important; /* Warna neon sky-blue modern */
+        }
+        /* Input & Dropdown dalam Swal harus ikut gelap total saat Dark Mode */
+        html.dark .swal2-html-container input,
+        html.dark .swal2-html-container select,
+        html.dark .swal2-html-container textarea {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+            border-color: #334155 !important;
+        }
+        html.dark .swal2-html-container input:focus,
+        html.dark .swal2-html-container select:focus,
+        html.dark .swal2-html-container textarea:focus {
+            border-color: #3b7eff !important;
+            box-shadow: 0 0 0 2px rgba(59, 126, 255, 0.25) !important;
+        }
+        html.dark .swal2-html-container input::placeholder,
+        html.dark .swal2-html-container textarea::placeholder {
+            color: #64748b !important;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden text-slate-800">
@@ -263,39 +346,6 @@
             if (activeMenu === 'dashboard' && document.getElementById('chart-cashflow-analytics')) {
                 initDashboardChart();
             }
-        }
-
-        function updateThemeToggleIcon(theme) {
-            const icon = document.getElementById("theme-toggle-icon");
-            if (icon) {
-                if (theme === "dark") {
-                    icon.className = "fa-solid fa-sun text-sm text-amber-400";
-                } else {
-                    icon.className = "fa-solid fa-moon text-sm text-slate-500";
-                }
-            }
-        }
-
-        // Load configuration dynamically
-        async function loadAppSettings() {
-            if (IS_PREVIEW) {
-                const savedSettings = localStorage.getItem("imers_settings");
-                if (savedSettings) {
-                    appSettings = JSON.parse(savedSettings);
-                }
-            } else {
-                try {
-                    const res = await safeFetch('getSettings');
-                    if (res.success && res.data.status === 'success') {
-                        appSettings = res.data.settings;
-                    }
-                } catch (e) {
-                    console.error("Gagal memuat konfigurasi branding dari database:", e);
-                }
-            }
-            // Update Loading Screen text
-            document.getElementById("load-brand-name").innerText = appSettings.brandName;
-            document.getElementById("load-brand-sub").innerText = appSettings.brandSub;
         }
 
         // Safe fetch helper handling JSON response & error notification
@@ -496,6 +546,9 @@
             }
         }
 
+        /* ==========================================
+           FUNGSI OTENTIKASI & TAMPILAN LOGIN (TEREGISTRASI ULANG)
+           ========================================== */
         function renderLoginScreen() {
             const container = document.getElementById("view-content");
             container.innerHTML = `
@@ -520,7 +573,7 @@
                     </div>
 
                     <!-- Login Screen Right -->
-                    <div class="w-full md:w-1/2 flex items-center justify-center p-6 bg-slate-950 min-h-screen">
+                    <div class="w-full md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 min-h-screen">
                         <div class="w-full max-w-md bg-slate-900 p-8 rounded-3xl border border-slate-800 shadow-2xl relative" data-aos="zoom-in">
                             <div class="flex items-center space-x-3 mb-8">
                                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-primary-500/20">
@@ -588,6 +641,11 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- Login Page Footer Credit -->
+                        <div class="mt-8 text-center text-3xs text-slate-500 font-semibold tracking-wide">
+                            Developed by <a href="https://imersnesia.com" target="_blank" class="hover:text-primary-400 underline transition-colors">Terry Katar | iMersnesia.com</a>
                         </div>
                     </div>
                 </div>
@@ -680,85 +738,186 @@
             });
         }
 
+        function updateThemeToggleIcon(theme) {
+            const icon = document.getElementById("theme-toggle-icon");
+            if (icon) {
+                if (theme === "dark") {
+                    icon.className = "fa-solid fa-sun text-sm text-amber-400";
+                } else {
+                    icon.className = "fa-solid fa-moon text-sm text-slate-500";
+                }
+            }
+        }
+
+        // Load configuration dynamically
+        async function loadAppSettings() {
+            if (IS_PREVIEW) {
+                const savedSettings = localStorage.getItem("imers_settings");
+                if (savedSettings) {
+                    appSettings = JSON.parse(savedSettings);
+                }
+            } else {
+                try {
+                    const res = await safeFetch('getSettings');
+                    if (res.success && res.data.status === 'success') {
+                        appSettings = res.data.settings;
+                    }
+                } catch (e) {
+                    console.error("Gagal memuat konfigurasi branding dari database:", e);
+                }
+            }
+            // Update Loading Screen text
+            document.getElementById("load-brand-name").innerText = appSettings.brandName;
+            document.getElementById("load-brand-sub").innerText = appSettings.brandSub;
+        }
+
         function renderDashboardLayout() {
             const container = document.getElementById("view-content");
             container.innerHTML = `
-                <div class="flex h-screen overflow-hidden bg-slate-50">
-                    <!-- Sidebar Left -->
-                    <aside id="sidebar-nav" class="hidden md:flex flex-col w-64 bg-slate-900 text-slate-300 flex-shrink-0 transition-all duration-300 relative border-r border-slate-800 z-30">
-                        <div class="p-6 flex items-center space-x-3 border-b border-slate-800">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-primary-500/25 animate-pulse">
-                                <i class="fa-solid ${appSettings.brandIcon}"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-white font-extrabold text-sm tracking-wide">${appSettings.brandName}</h2>
-                                <p class="text-slate-400 text-3xs uppercase tracking-widest font-bold">Smart Parent Platform</p>
-                            </div>
-                        </div>
-
-                        <!-- User Mini Card -->
-                        <div class="p-4 mx-3 my-4 bg-slate-800/40 border border-slate-800/80 rounded-2xl flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-full bg-primary-800 text-white flex items-center justify-center text-sm font-bold shadow-inner">
-                                ${currentUser.name.charAt(0)}
-                            </div>
-                            <div class="overflow-hidden">
-                                <h4 class="text-slate-200 font-bold text-xs truncate">${currentUser.name}</h4>
-                                <span class="px-2 py-0.5 bg-primary-900 text-primary-300 rounded-md text-3xs font-extrabold tracking-wide uppercase">
-                                    ${currentUser.role.replace("_", " ")}
+                <div class="flex flex-col h-screen overflow-hidden bg-slate-50">
+                    
+                    <!-- ==========================================
+                       TEMPORARY GLOBAL DEVELOPMENT WARNING BANNER (Sticky Top - 2 Tier Premium Layout)
+                       ========================================== -->
+                    <div class="bg-gradient-to-r from-red-700 via-slate-900 to-red-700 text-white shadow-lg z-50 border-b border-red-800 flex flex-col select-none">
+                        
+                        <!-- Tingkat 1: Badges, Buttons, dan Warning (Atas) -->
+                        <div class="px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-3 text-xs border-b border-white/5 bg-black/25">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-red-600 text-white px-2.5 py-0.5 rounded text-[9px] font-black uppercase tracking-widest animate-pulse flex-shrink-0">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> DEMO SYSTEM
                                 </span>
-                            </div>
-                        </div>
-
-                        <!-- Menu Links -->
-                        <nav id="menu-items-list" class="flex-grow px-3 space-y-1 overflow-y-auto">
-                            <!-- Injected Dynamically Based on Role -->
-                        </nav>
-
-                        <!-- Sidebar Footer Info -->
-                        <div class="p-4 border-t border-slate-800">
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Demo Mode</span>
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            </div>
-                        </div>
-                    </aside>
-
-                    <!-- Mobile Bottom & Slide Nav -->
-                    <div id="sidebar-mobile-overlay" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
-
-                    <!-- Main Application Area Right -->
-                    <div class="flex flex-col flex-grow h-full overflow-hidden">
-                        <!-- Top Navigation Bar -->
-                        <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
-                            <div class="flex items-center space-x-4">
-                                <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-600 hover:text-slate-900">
-                                    <i class="fa-solid fa-bars text-lg"></i>
-                                </button>
-                                <h3 id="current-page-title" class="text-slate-900 font-extrabold text-lg tracking-tight">Dashboard</h3>
+                                <span class="text-[10px] text-slate-300 font-semibold hidden sm:inline">iMersKORLAS Development Mode</span>
                             </div>
                             
-                            <div class="flex items-center space-x-3">
-                                <span class="hidden lg:inline text-xs text-slate-500 font-semibold bg-slate-100 py-1.5 px-3 rounded-full border border-slate-200">
-                                    <i class="fa-solid fa-school text-primary-600 mr-1.5"></i> ${currentUser.school}
-                                </span>
-
-                                <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200" title="Ubah Mode Layar">
-                                    <i id="theme-toggle-icon" class="fa-solid fa-moon"></i>
-                                </button>
-
-                                <button onclick="handleLogout()" class="text-slate-500 hover:text-red-600 font-semibold text-sm flex items-center space-x-2 transition-colors">
-                                    <span class="hidden sm:inline">Keluar</span>
-                                    <i class="fa-solid fa-sign-out text-base"></i>
-                                </button>
+                            <div class="flex flex-wrap items-center justify-center gap-3">
+                                <!-- Tombol WhatsApp Channel Terry Katar -->
+                                <a href="https://whatsapp.com/channel/0029VbDRNxR6BIErgr6SdJ1p" target="_blank" 
+                                    class="bg-emerald-500 hover:bg-emerald-400 text-white text-[10px] font-black px-4 py-1.5 rounded-full flex items-center space-x-1.5 shadow-md hover:scale-105 active:scale-95 transition-all">
+                                    <i class="fa-brands fa-whatsapp text-xs animate-bounce"></i>
+                                    <span>Folloe Ambil Lisensi Gratis</span>
+                                </a>
+                                
+                                <!-- Peringatan Warning Keras dengan Animasi Kedap-Kedip/Alarm Glow -->
+                                <div class="text-[9px] font-black tracking-widest px-3 py-1.5 rounded border animate-alarm">
+                                    ⚠️ 🔒 PRIVATE DEMO • SOURCE CODE TIDAK UNTUK DISALIN, DIBAGIKAN, ATAU DIPERJUALBELIKAN TANPA IZIN.
+                                </div>
                             </div>
-                        </header>
+                        </div>
 
-                        <!-- Main Content Dashboard Container -->
-                        <main id="main-content-flow" class="flex-grow p-6 overflow-y-auto">
-                            <!-- Injected content goes here -->
-                        </main>
+                        <!-- Tingkat 2: Running Marquee Full Width (Bawah - Dari Ujung Ke Ujung) -->
+                        <div class="bg-red-600/90 py-1.5 px-4 overflow-hidden w-full flex items-center">
+                            <marquee class="font-extrabold text-white text-xs leading-none w-full" scrollamount="4">
+                                Mohon Maaf ini Masih tahap development yang anda gunakan Akun Demo Jika sudah selesai dan Finish jika Anda Mau Gratis Aplikasi ini 1 lisensi Nanti Saya Share Di Channel Terry Katar | iMersnesia.com
+                            </marquee>
+                        </div>
+
+                    </div>
+
+                    <div class="flex flex-1 h-full overflow-hidden">
+                        <!-- Sidebar Left -->
+                        <aside id="sidebar-nav" class="hidden md:flex flex-col w-64 bg-slate-900 text-slate-300 flex-shrink-0 transition-all duration-300 relative border-r border-slate-800 z-50">
+                            <div class="p-6 flex items-center space-x-3 border-b border-slate-800">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-primary-500/25 animate-pulse">
+                                    <i class="fa-solid ${appSettings.brandIcon}"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-white font-extrabold text-sm tracking-wide">${appSettings.brandName}</h2>
+                                    <p class="text-slate-400 text-3xs uppercase tracking-widest font-bold">Smart Parent Platform</p>
+                                </div>
+                            </div>
+
+                            <!-- User Mini Card -->
+                            <div class="p-4 mx-3 my-4 bg-slate-800/40 border border-slate-800/80 rounded-2xl flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-primary-800 text-white flex items-center justify-center text-sm font-bold shadow-inner">
+                                    ${currentUser.name.charAt(0)}
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h4 class="text-slate-200 font-bold text-xs truncate">${currentUser.name}</h4>
+                                    <span class="px-2 py-0.5 bg-primary-900 text-primary-300 rounded-md text-3xs font-extrabold tracking-wide uppercase">
+                                        ${currentUser.role.replace("_", " ")}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Menu Links -->
+                            <nav id="menu-items-list" class="flex-grow px-3 space-y-1 overflow-y-auto">
+                                <!-- Injected Dynamically Based on Role -->
+                            </nav>
+
+                            <!-- Sidebar Footer Info -->
+                            <div class="p-4 border-t border-slate-800 space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Demo Mode</span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                </div>
+                                <div class="text-center pt-2 border-t border-slate-800/50">
+                                    <p class="text-4xs text-slate-500 font-medium tracking-wide">Developed by <a href="https://imersnesia.com" target="_blank" class="hover:text-primary-400 underline transition-colors">Terry Katar | iMersnesia.com</a></p>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <!-- Mobile Bottom & Slide Nav -->
+                        <div id="sidebar-mobile-overlay" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden" onclick="toggleMobileSidebar()"></div>
+
+                        <!-- Main Application Area Right -->
+                        <div class="flex flex-col flex-grow h-full overflow-hidden">
+                            <!-- Top Navigation Bar -->
+                            <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-20">
+                                <div class="flex items-center space-x-4">
+                                    <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-600 hover:text-slate-900">
+                                        <i class="fa-solid fa-bars text-lg"></i>
+                                    </button>
+                                    <h3 id="current-page-title" class="text-slate-900 font-extrabold text-lg tracking-tight">Dashboard</h3>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <span class="hidden lg:inline text-xs text-slate-500 font-semibold bg-slate-100 py-1.5 px-3 rounded-full border border-slate-200">
+                                        <i class="fa-solid fa-school text-primary-600 mr-1.5"></i> ${currentUser.school}
+                                    </span>
+
+                                    <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200" title="Ubah Mode Layar">
+                                        <i id="theme-toggle-icon" class="fa-solid fa-moon"></i>
+                                    </button>
+
+                                    <button onclick="handleLogout()" class="text-slate-500 hover:text-red-600 font-semibold text-sm flex items-center space-x-2 transition-colors">
+                                        <span class="hidden sm:inline">Keluar</span>
+                                        <i class="fa-solid fa-sign-out text-base"></i>
+                                    </button>
+                                </div>
+                            </header>
+
+                            <!-- Main Content Dashboard Container -->
+                            <main id="main-content-flow" class="flex-grow p-6 pb-24 md:pb-6 overflow-y-auto">
+                                <!-- Injected content goes here -->
+                            </main>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Mobile Bottom Navigation Bar (Glassmorphism & Colorful Icons) -->
+                <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800/80 h-16 flex items-center justify-around px-2 z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] pb-safe">
+                    <button onclick="navigateToMenu('dashboard')" id="mobile-menu-btn-dashboard" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-chart-pie text-lg text-sky-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Dashboard</span>
+                    </button>
+                    <button onclick="navigateToMenu('finance')" id="mobile-menu-btn-finance" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-wallet text-lg text-emerald-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Kas</span>
+                    </button>
+                    <button onclick="navigateToMenu('announcements')" id="mobile-menu-btn-announcements" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-bullhorn text-lg text-amber-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Info</span>
+                    </button>
+                    <button onclick="navigateToMenu('events')" id="mobile-menu-btn-events" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-calendar-days text-lg text-violet-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Agenda</span>
+                    </button>
+                    <button onclick="toggleMobileSidebar()" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all">
+                        <i class="fa-solid fa-ellipsis text-lg text-fuchsia-400"></i>
+                        <span class="text-[9px] font-bold mt-1">Lainnya</span>
+                    </button>
+                </nav>
             `;
 
             renderSidebarLinks();
@@ -818,6 +977,22 @@
                 activeBtn.className = "w-full flex items-center space-x-3.5 px-4 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary-600 to-indigo-600 text-white shadow-lg shadow-primary-500/10 group";
             }
 
+            // Update Mobile Bottom Nav Visuals
+            document.querySelectorAll("[id^='mobile-menu-btn-']").forEach(btn => {
+                btn.className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 transition-all duration-150";
+            });
+            const activeMobileBtn = document.getElementById(`mobile-menu-btn-${menuId}`);
+            if (activeMobileBtn) {
+                activeMobileBtn.className = "flex flex-col items-center justify-center flex-1 py-1 text-primary-600 dark:text-primary-400 scale-105 font-bold transition-all duration-150";
+            }
+
+            // Auto-close mobile drawer menu if opened during route change
+            const side = document.getElementById("sidebar-nav");
+            const over = document.getElementById("sidebar-mobile-overlay");
+            if (side && !side.classList.contains("hidden") && window.innerWidth < 768) {
+                toggleMobileSidebar();
+            }
+
             // Set Title Header
             const labels = {
                 dashboard: "Dashboard Summary",
@@ -875,8 +1050,8 @@
             
             const quotes = {
                 pagi: [
-                    "Setiap pagi adalah kesempatan baru untuk menjadi orang tua terbaik bagi anak-anak kita. Tetap semangat mendampingi tumbuh kembang buah hati!",
-                    "Mulailah hari dengan senyuman dan niat tulus. Keberhasilan anak dimulai dari kehangatan serta dukungan penuh keluarga di pagi hari."
+                    "Setiap pagi adalah kesempatan baru untuk menjadi orang parenting terbaik bagi anak-anak kita. Tetap semangat mendampingi tumbuh kembang buah hati!",
+                    "Mulailah hari dengan senyuman and niat tulus. Keberhasilan anak dimulai dari kehangatan serta dukungan penuh keluarga di pagi hari."
                 ],
                 siang: [
                     "Di tengah padatnya aktivitas siang ini, luangkan waktu sejenak untuk mengingat bahwa pelukan hangat Anda adalah rumah ternyaman bagi mereka.",
@@ -887,7 +1062,7 @@
                     "Kehangatan berkumpul bersama keluarga di sore hari adalah obat terbaik untuk memulihkan seluruh lelah aktivitas harian."
                 ],
                 malam: [
-                    "Malam yang tenang adalah waktu terbaik untuk merenung dan mensyukuri setiap benih kebaikan yang berhasil kita tanam bersama hari ini.",
+                    "Malam yang tenang adalah waktu terbaik untuk merenung and mensyukuri setiap benih kebaikan yang berhasil kita tanam bersama hari ini.",
                     "Istirahatlah dengan damai malam ini. Esok hari kita kembali melangkah bersama demi masa depan yang lebih cerah bagi anak-anak kita."
                 ]
             };
@@ -1176,12 +1351,11 @@
             });
 
             // Filtering parents to broadcast report to
-            // Admin/Komite can send to all parents. Korlas only sends to parents in their class.
             const isAllowedToBroadcast = currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'KOMITE' || currentUser.role === 'KORLAS';
             const targetParents = mockDB.users.filter(u => {
                 if (u.role !== 'WALI_MURID') return false;
                 if (currentUser.role === 'KORLAS') return u.classId === currentUser.classId;
-                return true; // Super Admin & Komite sees everyone
+                return true; 
             });
 
             main.innerHTML = `
@@ -1281,7 +1455,6 @@
                                         ${targetParents.length === 0 ? `
                                             <tr><td colspan="5" class="px-6 py-8 text-center text-slate-400 font-semibold">Belum ada Wali Murid yang terdaftar di kelas Anda.</td></tr>
                                         ` : targetParents.map(parent => {
-                                            // Check payments pending
                                             const hasPending = mockDB.payments.some(p => p.parentId === parent.id && p.status === 'PENDING');
                                             return `
                                                 <tr class="hover:bg-slate-50/50 transition-all">
@@ -1379,7 +1552,6 @@
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     Swal.fire({ title: 'Memproses broadcast antrean Fonnte...', didOpen: () => Swal.showLoading() });
-                    // simulate short wait
                     setTimeout(() => {
                         Swal.fire({
                             icon: 'success',
@@ -1396,7 +1568,6 @@
         function renderUsersManagement() {
             const main = document.getElementById("main-content-flow");
 
-            // Safeguard authorization
             const hasAccess = currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'KOMITE' || currentUser.role === 'KORLAS';
             if (!hasAccess) {
                 main.innerHTML = `
@@ -1409,7 +1580,6 @@
                 return;
             }
 
-            // Filtering shown users based on role
             const filteredUsers = mockDB.users.filter(u => {
                 if (currentUser.role === 'KORLAS') return u.classId === currentUser.classId;
                 return true; 
@@ -1564,42 +1734,38 @@
         function openAddClassModal() {
             Swal.fire({
                 title: 'Tambah Kelas / Rombel Baru',
-                customClass: {
-                    popup: 'rounded-3xl border border-slate-100 dark:border-slate-800 shadow-2xl bg-white dark:bg-slate-900',
-                    title: 'text-slate-900 dark:text-white font-extrabold text-xl tracking-tight border-b border-slate-100 dark:border-slate-800 pb-4'
-                },
                 html: `
                     <div class="text-left space-y-4 text-xs mt-5">
                         <div>
-                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">Kode Unik Kelas (ClassID)</label>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Kode Unik Kelas (ClassID)</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                     <i class="fa-solid fa-barcode"></i>
                                 </span>
                                 <input type="text" id="modal-class-id" placeholder="Contoh: C1C" 
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl font-mono uppercase focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
+                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-mono uppercase focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nama Lengkap Kelas</label>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Nama Lengkap Kelas</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                     <i class="fa-solid fa-school"></i>
                                 </span>
                                 <input type="text" id="modal-class-name" placeholder="Contoh: Kelas 1-C (Al-Jazari)" 
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
+                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
                             </div>
                         </div>
 
                         <div>
-                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">Tingkatan Tingkat Sekolah</label>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Tingkatan Tingkat Sekolah</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                     <i class="fa-solid fa-arrow-up-9-1"></i>
                                 </span>
                                 <input type="number" id="modal-class-level" min="1" max="12" value="1" 
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
+                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
                             </div>
                         </div>
                     </div>
@@ -1632,13 +1798,10 @@
                     Swal.fire({ title: 'Mendaftarkan kelas baru...', didOpen: () => Swal.showLoading() });
                     const res = await safeFetch('addClass', result.value);
                     if (res.success && res.data.status === 'success') {
-                        if (IS_PREVIEW) {
-                            // Already pushed inside mockServerRouter
-                        }
                         Swal.fire({
                             icon: 'success',
                             title: 'Kelas Berhasil Ditambahkan',
-                            text: `${result.value.className} sekarang terdaftar dan siap dihubungkan ke pengurus kelas & wali murid!`,
+                            text: `${result.value.className} sekarang terdaftar and siap dihubungkan ke pengurus kelas & wali murid!`,
                             confirmButtonColor: '#10b981'
                         });
                         renderUsersManagement();
@@ -1648,7 +1811,6 @@
         }
 
         function openAddUserModal() {
-            // Determine roles list based on authorized role creator
             let roleOptionsHTML = '';
             if (currentUser.role === 'SUPER_ADMIN') {
                 roleOptionsHTML = `
@@ -1663,17 +1825,16 @@
                     <option value="KORLAS">👥 Pengurus KORLAS Kelas</option>
                     <option value="WALI_MURID" selected>👤 Wali Murid</option>
                 `;
-            } else { // Korlas can only add wali murid to their class
+            } else { 
                 roleOptionsHTML = `<option value="WALI_MURID" selected>👤 Wali Murid</option>`;
             }
 
-            // Determine classes selector dynamically pulling from mockDB
             let classSelectorHTML = '';
             if (currentUser.role === 'KORLAS') {
-                classSelectorHTML = `<input type="text" id="modal-user-class" value="${currentUser.classId}" readonly class="w-full p-3 bg-slate-100 border rounded-xl text-slate-500 font-bold cursor-not-allowed">`;
+                classSelectorHTML = `<input type="text" id="modal-user-class" value="${currentUser.classId}" readonly class="w-full p-3 bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 rounded-xl text-slate-500 font-bold cursor-not-allowed">`;
             } else {
                 classSelectorHTML = `
-                    <select id="modal-user-class" class="w-full p-3 border rounded-xl bg-slate-50 font-semibold appearance-none">
+                    <select id="modal-user-class" class="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white font-semibold appearance-none">
                         <option value="ALL">Semua Kelas (Akses Global / Komite)</option>
                         ${mockDB.classes.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
                     </select>
@@ -1682,57 +1843,53 @@
 
             Swal.fire({
                 title: 'Tambah Pengguna Baru',
-                customClass: {
-                    popup: 'rounded-3xl border border-slate-100 dark:border-slate-800 shadow-2xl bg-white dark:bg-slate-900',
-                    title: 'text-slate-900 dark:text-white font-extrabold text-xl tracking-tight border-b border-slate-100 dark:border-slate-800 pb-4'
-                },
                 html: `
                     <div class="text-left space-y-4 text-xs mt-5">
                         <!-- Bidang Nama -->
                         <div>
-                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nama Lengkap Anggota</label>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Nama Lengkap Anggota</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                     <i class="fa-solid fa-id-card"></i>
                                 </span>
-                                <input type="text" id="modal-user-name" placeholder="Contoh: Bunda Shaqueena Amira" 
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
+                                <input type="text" id="modal-user-name" placeholder="Contoh: Shaqueena Amira" 
+                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
                             </div>
                         </div>
 
                         <!-- Bidang HP -->
                         <div>
-                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nomor WhatsApp / HP</label>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Nomor WhatsApp / HP</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                     <i class="fa-brands fa-whatsapp text-emerald-500"></i>
                                 </span>
                                 <input type="tel" id="modal-user-hp" placeholder="Contoh: 08123456789" 
-                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
+                                    class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
                             </div>
                         </div>
 
                         <!-- Grid PIN & Hak Akses -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">PIN Kredensial Keamanan</label>
+                                <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">PIN Kredensial Keamanan</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                         <i class="fa-solid fa-lock"></i>
                                     </span>
                                     <input type="password" id="modal-user-pin" maxlength="6" value="123456" placeholder="******" 
-                                        class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl text-center font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
+                                        class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-center font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">Hak Akses Sistem</label>
+                                <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Hak Akses Sistem</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                         <i class="fa-solid fa-shield-halved"></i>
                                     </span>
                                     <select id="modal-user-role" onchange="handleRoleSelectionChange(this.value)"
-                                        class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white appearance-none cursor-pointer">
+                                        class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-800 dark:text-white appearance-none cursor-pointer">
                                         ${roleOptionsHTML}
                                     </select>
                                 </div>
@@ -1741,7 +1898,7 @@
 
                         <!-- Bidang Penempatan Kelas (Dinamis) -->
                         <div>
-                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">Pariwisata / Penempatan Kelas</label>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Penempatan Kelas</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                                     <i class="fa-solid fa-school"></i>
@@ -1812,7 +1969,6 @@
             });
         }
 
-        // Helper fungsi logika cerdas untuk auto-toggle dropdown kelas di dalam pop-up
         function handleRoleSelectionChange(role) {
             const classSelect = document.getElementById("modal-user-class");
             if (!classSelect || currentUser.role === 'KORLAS') return;
@@ -1863,7 +2019,7 @@
                                                 <p class="text-slate-500 text-4xs uppercase tracking-wide font-extrabold">${ann.date}</p>
                                             </div>
                                         </div>
-                                        ${ann.pin ? `<span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md text-4xs font-extrabold uppercase tracking-wide"><i class="fa-solid fa-thumbtack mr-1"></i> Tersemat</span>` : ''}
+                                        ${ann.pin ? `<span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-md text-4xs font-extrabold uppercase tracking-wide"><i class="fa-solid fa-thumbtack mr-1"></i> Tersemat</span>` : ''}
                                     </div>
                                     <h4 class="text-sm font-extrabold text-slate-900 mb-2">${ann.title}</h4>
                                     <p class="text-slate-600 text-xs leading-relaxed mb-4">${ann.content}</p>
@@ -1887,23 +2043,23 @@
                 html: `
                     <div class="text-left space-y-4 text-xs mt-4">
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Target Audiens</label>
-                            <select id="modal-ann-target" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Target Audiens</label>
+                            <select id="modal-ann-target" class="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-850 dark:text-white font-semibold">
                                 <option value="ALL">Semua Kelas (Pengumuman Komite)</option>
                                 <option value="C1A">Kelas 1-A Ibnu Sina (Saja)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Judul Maklumat</label>
-                            <input type="text" id="modal-ann-title" placeholder="Tulis judul yang menarik..." class="w-full p-2.5 border rounded-xl">
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Judul Maklumat</label>
+                            <input type="text" id="modal-ann-title" placeholder="Tulis judul yang menarik..." class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-850 dark:text-white font-medium">
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Isi Pengumuman</label>
-                            <textarea id="modal-ann-content" rows="4" placeholder="Tulis pesan lengkap kepada orang tua..." class="w-full p-2.5 border rounded-xl"></textarea>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Isi Pengumuman</label>
+                            <textarea id="modal-ann-content" rows="4" placeholder="Tulis pesan lengkap kepada orang tua..." class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-850 dark:text-white font-medium"></textarea>
                         </div>
                         <div class="flex items-center space-x-2">
                             <input type="checkbox" id="modal-ann-pin" class="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500">
-                            <label for="modal-ann-pin" class="font-bold text-slate-700">Pin pengumuman ini di bagian teratas</label>
+                            <label for="modal-ann-pin" class="font-bold text-slate-800 dark:text-sky-400">Pin pengumuman ini di bagian teratas</label>
                         </div>
                     </div>
                 `,
@@ -1917,7 +2073,7 @@
                     const content = document.getElementById("modal-ann-content").value;
                     const pin = document.getElementById("modal-ann-pin").checked;
                     if (!title || !content) {
-                        Swal.showValidationMessage("Harap isi seluruh judul dan materi pengumuman!");
+                        Swal.showValidationMessage("Harap isi seluruh judul and materi pengumuman!");
                     }
                     return { target, title, content, pin };
                 }
@@ -1972,7 +2128,7 @@
                             <h5 class="text-slate-800 font-extrabold text-xs uppercase tracking-wider mb-4"><i class="fa-solid fa-clock-rotate-left mr-1.5 text-primary-600"></i> Reminder Sistem</h5>
                             <p class="text-slate-600 text-xs leading-relaxed mb-4">Sistem akan mengirimkan pengingat broadcast WhatsApp secara otomatis <strong>H-1 sebelum agenda dimulai</strong> langsung ke seluruh nomor HP wali murid terdaftar.</p>
                             <div class="p-4 bg-primary-50 rounded-xl border border-primary-100 text-primary-800 text-2xs font-semibold leading-relaxed">
-                                Fitur ini menggunakan integrasi webhook otomatis dari Google Apps Script dan WhatsApp Fonnte.
+                                Fitur ini menggunakan integrasi webhook otomatis dari Google Apps Script and WhatsApp Fonnte.
                             </div>
                         </div>
                     </div>
@@ -2042,7 +2198,6 @@
                                 v.options.forEach(opt => choicesCount[opt] = 0);
                                 responses.forEach(r => choicesCount[r.choice] = (choicesCount[r.choice] || 0) + 1);
 
-                                // Check if user already voted
                                 const alreadyVoted = responses.some(r => r.parentId === currentUser.id);
 
                                 return `
@@ -2077,7 +2232,7 @@
                                             </div>
                                         ` : `
                                             <div class="pt-4 border-t border-slate-100">
-                                                <label class="block font-bold text-slate-700 text-xs mb-2">Pilih Suara Anda:</label>
+                                                <label class="block font-bold text-slate-800 dark:text-sky-400 text-xs mb-2">Pilih Suara Anda:</label>
                                                 <div class="flex flex-wrap gap-2">
                                                     ${v.options.map(opt => `
                                                         <button onclick="submitUserVote('${v.id}', '${opt}')" class="bg-primary-50 hover:bg-primary-100 text-primary-700 border border-primary-200 font-bold text-2xs py-2 px-3.5 rounded-xl transition-colors">
@@ -2185,23 +2340,23 @@
                 html: `
                     <div class="text-left space-y-4 text-xs mt-4">
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Siswa</label>
-                            <input type="text" id="modal-perm-name" placeholder="Nama lengkap putra-putri Anda" class="w-full p-2.5 border rounded-xl">
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Nama Lengkap Siswa</label>
+                            <input type="text" id="modal-perm-name" placeholder="Nama lengkap putra-putri Anda" class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-slate-850 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Sebab Berhalangan</label>
-                            <select id="modal-perm-type" class="w-full p-2.5 border rounded-xl bg-slate-50">
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Sebab Berhalangan</label>
+                            <select id="modal-perm-type" class="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-850 dark:text-white font-semibold">
                                 <option value="Sakit">Sakit (Membutuhkan Istirahat)</option>
                                 <option value="Izin Penting">Izin / Keperluan Mendesak Keluarga</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Catatan Keterangan Detail</label>
-                            <textarea id="modal-perm-desc" rows="3" placeholder="Tulis alasan tidak hadir di kelas..." class="w-full p-2.5 border rounded-xl"></textarea>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Catatan Keterangan Detail</label>
+                            <textarea id="modal-perm-desc" rows="3" placeholder="Tulis alasan tidak hadir di kelas..." class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-850 dark:text-white font-medium"></textarea>
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Link Surat / Bukti Foto (Opsional)</label>
-                            <input type="text" id="modal-perm-file" placeholder="URL Foto Surat Keterangan / Surat Dokter" class="w-full p-2.5 border rounded-xl">
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Link Surat / Bukti Foto (Opsional)</label>
+                            <input type="text" id="modal-perm-file" placeholder="URL Foto Surat Keterangan / Surat Dokter" class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-slate-850 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
                         </div>
                     </div>
                 `,
@@ -2215,7 +2370,7 @@
                     const desc = document.getElementById("modal-perm-desc").value;
                     const file = document.getElementById("modal-perm-file").value;
                     if (!studentName || !desc) {
-                        Swal.showValidationMessage("Harap isi nama anak dan catatan keterangan!");
+                        Swal.showValidationMessage("Harap isi nama anak and catatan keterangan!");
                     }
                     return { studentName, type, desc, file };
                 }
@@ -2431,7 +2586,7 @@
                                             <i class="fa-solid ${appSettings.brandIcon}"></i>
                                         </div>
                                     </div>
-                                </div>
+                                }
                                 <button onclick="saveBrandingConfig()" class="bg-primary-600 hover:bg-primary-500 text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow-md transition-colors w-full">
                                     Simpan Perubahan Branding
                                 </button>
@@ -2470,7 +2625,7 @@
                         text: 'Tampilan aplikasi & login diperbarui secara real-time!',
                         confirmButtonColor: '#1e3a8a'
                     }).then(() => {
-                        location.reload(); // Reload page to cleanly propagate changes
+                        location.reload(); 
                     });
                 }, 500);
             } else {
@@ -2580,6 +2735,200 @@
                         text: res.data?.message || res.error || 'Terjadi kesalahan.',
                         confirmButtonColor: '#1e3a8a'
                     });
+                }
+            });
+        }
+
+        function openPaymentSubmissionModal() {
+            Swal.fire({
+                title: 'Setor Bukti Transfer Iuran',
+                html: `
+                    <div class="text-left space-y-4 text-xs mt-5">
+                        <div>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Jenis Iuran / Pembayaran</label>
+                            <select id="modal-pay-type" class="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-850 dark:text-white font-semibold">
+                                <option value="Iuran Bulanan">Iuran Bulanan Kas</option>
+                                <option value="Kegiatan">Iuran Kegiatan</option>
+                                <option value="Study Tour">Study Tour</option>
+                                <option value="Sosial">Iuran Sosial</option>
+                                <option value="Seragam">Pembayaran Seragam</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Nominal Setoran (Rp)</label>
+                            <input type="number" id="modal-pay-amount" placeholder="Contoh: 150000" 
+                                class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-slate-850 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Link / Bukti Transfer (URL Foto)</label>
+                            <input type="text" id="modal-pay-proof" placeholder="https://placehold.co/400x600/..." value="https://placehold.co/400x600/e2e8f0/1e293b?text=Bukti+Transfer"
+                                class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-slate-850 dark:text-white">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa-solid fa-paper-plane mr-1.5"></i> Kirim Bukti',
+                cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-primary-600 hover:bg-primary-500 text-white font-bold text-xs py-3 px-6 rounded-xl shadow-lg shadow-primary-500/10 mr-2 transition-all cursor-pointer',
+                    cancelButton: 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs py-3 px-6 rounded-xl transition-all cursor-pointer'
+                },
+                preConfirm: () => {
+                    const type = document.getElementById("modal-pay-type").value;
+                    const amount = document.getElementById("modal-pay-amount").value;
+                    const proof = document.getElementById("modal-pay-proof").value;
+                    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+                        Swal.showValidationMessage("Harap masukkan nominal setoran yang valid!");
+                        return false;
+                    }
+                    return { type, amount, proof };
+                }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'Mengirim setoran...', didOpen: () => Swal.showLoading() });
+                    const res = await safeFetch('submitPayment', result.value);
+                    if (res.success && res.data.status === 'success') {
+                        if (IS_PREVIEW) {
+                            mockDB.payments.push({
+                                id: res.data.payment.id,
+                                parentId: currentUser.id,
+                                parentName: currentUser.name,
+                                amount: Number(result.value.amount),
+                                type: result.value.type,
+                                proof: result.value.proof,
+                                status: "PENDING",
+                                date: new Date().toISOString().split('T')[0],
+                                classId: currentUser.classId
+                            });
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Bukti Berhasil Dikirim',
+                            text: 'Pembayaran Anda dalam status PENDING menunggu verifikasi KORLAS Kelas.',
+                            confirmButtonColor: '#3b7eff'
+                        });
+                        renderFinance();
+                    }
+                }
+            });
+        }
+
+        function openTransactionEntryModal() {
+            Swal.fire({
+                title: 'Catat Transaksi Kas',
+                html: `
+                    <div class="text-left space-y-4 text-xs mt-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Tipe Aliran Dana</label>
+                                <select id="modal-tx-type" class="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-850 dark:text-white font-semibold">
+                                    <option value="IN">Pemasukan (IN)</option>
+                                    <option value="OUT">Pengeluaran (OUT)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Kategori Kas</label>
+                                <select id="modal-tx-category" class="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-850 dark:text-white font-semibold">
+                                    <option value="Iuran Bulanan">Iuran Bulanan</option>
+                                    <option value="Kegiatan">Kegiatan</option>
+                                    <option value="Study Tour">Study Tour</option>
+                                    <option value="Sosial">Sosial</option>
+                                    <option value="Seragam">Seragam</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Nominal Transaksi (Rp)</label>
+                            <input type="number" id="modal-tx-amount" placeholder="Contoh: 250000" 
+                                class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-slate-850 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Deskripsi / Keterangan</label>
+                            <input type="text" id="modal-tx-desc" placeholder="Contoh: Pembelian alat tulis mewarnai kelas" 
+                                class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-slate-850 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 dark:text-sky-400 mb-1.5">Tanggal Transaksi</label>
+                            <input type="date" id="modal-tx-date" value="${new Date().toISOString().split('T')[0]}"
+                                class="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-medium text-slate-850 dark:text-white">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa-solid fa-floppy-disk mr-1.5"></i> Simpan Transaksi',
+                cancelButtonText: 'Batal',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-primary-600 hover:bg-primary-500 text-white font-bold text-xs py-3 px-6 rounded-xl shadow-lg shadow-primary-500/10 mr-2 transition-all cursor-pointer',
+                    cancelButton: 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs py-3 px-6 rounded-xl transition-all cursor-pointer'
+                },
+                preConfirm: () => {
+                    const type = document.getElementById("modal-tx-type").value;
+                    const category = document.getElementById("modal-tx-category").value;
+                    const amount = document.getElementById("modal-tx-amount").value;
+                    const desc = document.getElementById("modal-tx-desc").value;
+                    const date = document.getElementById("modal-tx-date").value;
+                    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+                        Swal.showValidationMessage("Harap masukkan nominal transaksi yang valid!");
+                        return false;
+                    }
+                    if (!desc) {
+                        Swal.showValidationMessage("Deskripsi transaksi wajib diisi!");
+                        return false;
+                    }
+                    return { type, category, amount, desc, date };
+                }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'Menyimpan transaksi...', didOpen: () => Swal.showLoading() });
+                    const res = await safeFetch('addTransaction', result.value);
+                    if (res.success && res.data.status === 'success') {
+                        if (IS_PREVIEW) {
+                            mockDB.transactions.push({
+                                id: `T${String(mockDB.transactions.length + 1).padStart(3, '0')}`,
+                                classId: currentUser.classId,
+                                category: result.value.category,
+                                type: result.value.type,
+                                amount: Number(result.value.amount),
+                                date: result.value.date,
+                                desc: result.value.desc
+                            });
+                        }
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Transaksi Berhasil Dicatat',
+                            text: 'Aliran kas keuangan real-time diperbarui seketika.',
+                            confirmButtonColor: '#3b7eff'
+                        });
+                        renderFinance();
+                    }
+                }
+            });
+        }
+
+        function simulatePinReset(userId, name) {
+            Swal.fire({
+                title: 'Reset PIN Keamanan?',
+                text: `Apakah Anda yakin ingin menyetel ulang PIN login untuk ${name} kembali ke default '123456'?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Reset',
+                confirmButtonColor: '#f43f5e',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const uIdx = mockDB.users.findIndex(u => u.id === userId);
+                    if (uIdx > -1) {
+                        mockDB.users[uIdx].pin = "123456";
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'PIN Disetel Ulang',
+                            text: `PIN login milik ${name} berhasil dikembalikan ke PIN bawaan default: 123456.`,
+                            confirmButtonColor: '#1e3a8a'
+                        });
+                        renderUsersManagement();
+                    }
                 }
             });
         }
