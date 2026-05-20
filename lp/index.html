@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMersKORLAS - Digital Parent Community Platform</title>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            200: '#c7dcff',
+                            300: '#9fc3ff',
+                            400: '#6ea0ff',
+                            500: '#3b7eff',
+                            600: '#2560eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                            950: '#070b19',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- AOS Animations -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Glassmorphism Frosted Glass Utility - Light & Dark Adaptable */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+        html.dark .glass-panel {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        /* Custom Glowing effects */
+        .glow-blue {
+            box-shadow: 0 0 40px -5px rgba(59, 126, 255, 0.15);
+        }
+        html.dark .glow-blue {
+            box-shadow: 0 0 50px -5px rgba(59, 126, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-primary-950 dark:text-slate-100 overflow-x-hidden">
+
+    <!-- ==========================================
+       HEADER / NAVBAR (Frosted Glassmorphism)
+       ========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/70 dark:bg-primary-950/80 backdrop-blur-md border-b border-slate-200/50 dark:border-white/5" id="main-nav">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-primary-500/25 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-people-roof"></i>
+                </div>
+                <div>
+                    <h1 class="text-slate-900 dark:text-white font-black text-lg tracking-wider leading-none">iMersKORLAS</h1>
+                    <span class="text-[9px] text-primary-600 dark:text-primary-400 font-bold uppercase tracking-widest">Komunitas Wali Murid Digital</span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
+                <a href="#fitur" class="hover:text-primary-600 dark:hover:text-white transition-colors">Fitur Utama</a>
+                <a href="#manfaat" class="hover:text-primary-600 dark:hover:text-white transition-colors">Manfaat</a>
+                <a href="#simulasi" class="hover:text-primary-600 dark:hover:text-white transition-colors">Simulasi Interaktif</a>
+                <a href="#pricing" class="hover:text-primary-600 dark:hover:text-white transition-colors">Harga</a>
+            </nav>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <!-- Dark Mode / Light Mode Toggle Button -->
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition-all duration-200" title="Ubah Mode Layar">
+                    <i id="theme-toggle-icon" class="fa-solid fa-moon text-slate-600 dark:text-slate-400 theme-toggle-icon"></i>
+                </button>
+
+                <a href="https://whatsapp.com/channel/0029VbDRNxR6BIErgr6SdJ1p" target="_blank" class="text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-white text-sm font-semibold transition-colors">Hubungi Kami</a>
+                <button onclick="window.open('index.html', '_blank')" class="bg-primary-600 hover:bg-primary-500 text-white font-bold text-xs py-3 px-6 rounded-xl shadow-lg shadow-primary-500/20 transition-all hover:-translate-y-0.5 active:translate-y-0">
+                    Buka Aplikasi Demo <i class="fa-solid fa-arrow-up-right-from-square ml-1.5"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <div class="flex items-center space-x-3 md:hidden">
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-moon text-slate-600 dark:text-slate-400 theme-toggle-icon"></i>
+                </button>
+                <button onclick="toggleMobileMenu()" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl" id="menu-btn-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-primary-950 border-b border-slate-200/50 dark:border-white/5 px-6 py-6 space-y-4">
+            <a href="#fitur" onclick="toggleMobileMenu()" class="block text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-white font-semibold">Fitur Utama</a>
+            <a href="#manfaat" onclick="toggleMobileMenu()" class="block text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-white font-semibold">Manfaat</a>
+            <a href="#simulasi" onclick="toggleMobileMenu()" class="block text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-white font-semibold">Simulasi Interaktif</a>
+            <a href="#pricing" onclick="toggleMobileMenu()" class="block text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-white font-semibold">Harga</a>
+            <hr class="border-slate-200/50 dark:border-white/5">
+            <a href="https://whatsapp.com/channel/0029VbDRNxR6BIErgr6SdJ1p" target="_blank" class="block text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-white font-semibold">Hubungi Kami</a>
+            <button onclick="window.open('index.html', '_blank')" class="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm py-3.5 rounded-xl transition-all">
+                Buka Aplikasi Demo
+            </button>
+        </div>
+    </header>
+
+    <!-- ==========================================
+       HERO SECTION
+       ========================================== -->
+    <section class="relative pt-36 pb-24 md:pt-48 md:pb-36 overflow-hidden">
+        <!-- Background Glow Elements -->
+        <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary-600/10 dark:bg-primary-600/5 rounded-full mix-blend-screen filter blur-[100px] -z-10 animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-600/10 dark:bg-indigo-600/5 rounded-full mix-blend-screen filter blur-[100px] -z-10 animate-pulse delay-1000"></div>
+
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <span class="px-4 py-1.5 bg-primary-100/80 dark:bg-primary-900/40 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 rounded-full text-xs font-bold uppercase tracking-wider inline-block mb-6" data-aos="fade-down">
+                🚀 Kolaborasi Modern Komite, Korlas & Wali Murid
+            </span>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-tight max-w-5xl mx-auto" data-aos="zoom-out" data-aos-delay="100">
+                Terhubung. Terorganisir.<br><span class="bg-gradient-to-r from-primary-600 to-indigo-600 dark:from-primary-400 dark:to-indigo-400 bg-clip-text text-transparent">Transparan.</span>
+            </h1>
+            <p class="text-slate-600 dark:text-slate-400 text-base md:text-lg max-w-2xl mx-auto mt-6 leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                Hubungkan Sekolah, Komite, KORLAS, dan Wali Murid dalam satu ekosistem digital yang bersih dan aman. Pantau transparansi iuran kas kelas, hasil voting keputusan bersama, hingga pengajuan surat izin sakit anak secara real-time.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-10" data-aos="fade-up" data-aos-delay="300">
+                <button onclick="window.open('index.html', '_blank')" class="w-full sm:w-auto bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-500 hover:to-indigo-500 text-white font-extrabold text-sm py-4 px-8 rounded-2xl shadow-xl shadow-primary-500/20 transition-all hover:scale-105 active:scale-95">
+                    Mulai Coba Demo Aplikasi <i class="fa-solid fa-circle-play ml-2"></i>
+                </button>
+                <a href="https://whatsapp.com/channel/0029VbDRNxR6BIErgr6SdJ1p" target="_blank" class="w-full sm:w-auto glass-panel hover:bg-white/50 dark:hover:bg-white/5 text-slate-700 dark:text-white font-bold text-sm py-4 px-8 rounded-2xl transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-500 text-base"></i>
+                    <span>Ikuti Saluran WhatsApp</span>
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mt-24 pt-8 border-t border-slate-200 dark:border-white/5" data-aos="fade-up" data-aos-delay="400">
+                <div>
+                    <h3 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">500+</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mt-1">Sekolah Aktif</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">12K+</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mt-1">Wali Murid Terhubung</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">100%</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mt-1">Audit Kas Transparan</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">&lt; 1 Detik</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mt-1">Notifikasi Terkirim</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+       ROLE CONNECTIVITY SECTION
+       ========================================== -->
+    <section class="py-20 bg-slate-100/40 dark:bg-slate-900/40 border-y border-slate-200/50 dark:border-white/5 relative" id="manfaat">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">Alur Komunikasi Sekolah yang Rapi</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-3 leading-relaxed">iMersKORLAS menyederhanakan rantai informasi demi mencegah kesalahpahaman, menggantikan tumpukan surat kertas dan riwayat grup obrolan yang berantakan.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+                <!-- Card 1: Sekolah -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:border-primary-500 transition-all hover:-translate-y-1" data-aos="fade-up">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400 flex items-center justify-center text-lg mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-school"></i>
+                    </div>
+                    <h3 class="text-slate-900 dark:text-white font-extrabold text-base">Pihak Sekolah</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs mt-2.5 leading-relaxed">Mengirimkan surat edaran resmi, kalender kegiatan akademik, dan kebijakan umum langsung ke seluruh paguyuban orang tua.</p>
+                </div>
+
+                <!-- Card 2: Komite -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:border-amber-500 transition-all hover:-translate-y-1" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center text-lg mb-6 group-hover:bg-amber-500 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 class="text-slate-900 dark:text-white font-extrabold text-base">Komite Sekolah</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs mt-2.5 leading-relaxed">Melakukan pengawasan kas lintas kelas, menyusun laporan keuangan tahunan, and menyiarkan agenda kegiatan komite secara luas.</p>
+                </div>
+
+                <!-- Card 3: Korlas -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:border-emerald-500 transition-all hover:-translate-y-1" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 flex items-center justify-center text-lg mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <h3 class="text-slate-900 dark:text-white font-extrabold text-base">Pengurus KORLAS</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs mt-2.5 leading-relaxed">Mengelola pembukuan kas kelas, laporan belanja kegiatan belajar mengajar, perizinan siswa, dan membuat voting program kelas.</p>
+                </div>
+
+                <!-- Card 4: Wali Murid -->
+                <div class="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:border-sky-500 transition-all hover:-translate-y-1" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-500 dark:text-sky-400 flex items-center justify-center text-lg mb-6 group-hover:bg-sky-500 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h3 class="text-slate-900 dark:text-white font-extrabold text-base">Wali Murid</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs mt-2.5 leading-relaxed">Menyetorkan iuran secara mudah dengan melampirkan foto bukti pembayaran, mengisi jajak pendapat, serta mengirim surat sakit anak.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+       FEATURES SECTION
+       ========================================== -->
+    <section class="py-20" id="fitur">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">Sederhanakan Kegiatan Paguyuban Sekolah</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-3 leading-relaxed">Aplikasi iMersKORLAS dirancang dengan antarmuka yang modern, bersih, and responsif guna memastikan kenyamanan penggunaan oleh seluruh kalangan usia.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white/40 dark:bg-primary-900/20 border border-slate-200 dark:border-white/5 p-8 rounded-3xl space-y-4 group hover:border-primary-500/40 transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                    </div>
+                    <h4 class="text-slate-900 dark:text-white font-bold text-lg">Pembukuan Kas Transparan</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">Catat arus kas masuk, laporan belanja kelas, riwayat pembayaran iuran, serta fitur verifikasi pembayaran oleh Komite Sekolah secara instan.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-white/40 dark:bg-primary-900/20 border border-slate-200 dark:border-white/5 p-8 rounded-3xl space-y-4 group hover:border-primary-500/40 transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <h4 class="text-slate-900 dark:text-white font-bold text-lg">Pengumuman Tersemat</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">Terbitkan pengumuman resmi dengan label sematan (pin) khusus pada posisi teratas agar informasi penting tidak tertumpuk oleh obrolan harian.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white/40 dark:bg-primary-900/20 border border-slate-200 dark:border-white/5 p-8 rounded-3xl space-y-4 group hover:border-primary-500/40 transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+                    </div>
+                    <h4 class="text-slate-900 dark:text-white font-bold text-lg">Jajak Pendapat & Polling</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">Ambil keputusan bersama mengenai kegiatan studi tur, seragam kelas, atau agenda kas secara demokratis dengan sajian hasil diagram real-time.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-white/40 dark:bg-primary-900/20 border border-slate-200 dark:border-white/5 p-8 rounded-3xl space-y-4 group hover:border-primary-500/40 transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-sheet-plastic"></i>
+                    </div>
+                    <h4 class="text-slate-900 dark:text-white font-bold text-lg">Surat Izin Sakit Digital</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">Kirim permohonan izin sakit anak Anda dengan melampirkan foto surat keterangan medis secara formal tanpa harus menyusun chat WhatsApp panjang.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-white/40 dark:bg-primary-900/20 border border-slate-200 dark:border-white/5 p-8 rounded-3xl space-y-4 group hover:border-primary-500/40 transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <h4 class="text-slate-900 dark:text-white font-bold text-lg">Notifikasi WhatsApp Otomatis</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">Kirim pengingat tagihan iuran, bukti kuitansi digital, dan pemberitahuan agenda rapat H-1 langsung ke nomor WhatsApp orang tua siswa.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-white/40 dark:bg-primary-900/20 border border-slate-200 dark:border-white/5 p-8 rounded-3xl space-y-4 group hover:border-primary-500/40 transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <h4 class="text-slate-900 dark:text-white font-bold text-lg">Tema Frosted & Mode Gelap</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed">Tampilan berlatar transparan mewah yang nyaman di mata dengan dukungan peralihan tema gelap-terang secara instan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+       INTERACTIVE DEMO SIMULATOR
+       ========================================== -->
+    <section class="py-20 bg-slate-100/40 dark:bg-slate-900/50 border-t border-b border-slate-200/50 dark:border-white/5" id="simulasi">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Simulator Control Panel Left -->
+                <div class="space-y-6" data-aos="fade-right">
+                    <span class="text-primary-600 dark:text-primary-400 font-extrabold text-xs uppercase tracking-widest block">Uji Coba Langsung</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white leading-tight">Simulasikan Kemudahan iMersKORLAS</h2>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Klik tombol perintah interaktif di bawah ini untuk melihat simulasi pesan notifikasi instan secara real-time pada mockup layar ponsel sebelah kanan!</p>
+                    
+                    <div class="space-y-3.5 pt-4">
+                        <button onclick="runSimulation('iuran')" class="w-full text-left p-4 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-150 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 hover:border-emerald-500/30 flex items-center justify-between transition-all shadow-sm group">
+                            <div class="flex items-center space-x-3.5">
+                                <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">Simulasikan Konfirmasi Pembayaran Kas</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-slate-400 text-3xs"></i>
+                        </button>
+
+                        <button onclick="runSimulation('polling')" class="w-full text-left p-4 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-150 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 hover:border-indigo-500/30 flex items-center justify-between transition-all shadow-sm group">
+                            <div class="flex items-center space-x-3.5">
+                                <div class="w-9 h-9 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-square-poll-vertical"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-500 transition-colors">Simulasikan Rilis Polling Kelas Baru</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-slate-400 text-3xs"></i>
+                        </button>
+
+                        <button onclick="runSimulation('izin')" class="w-full text-left p-4 rounded-2xl bg-white dark:bg-white/5 hover:bg-slate-150 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 hover:border-rose-500/30 flex items-center justify-between transition-all shadow-sm group">
+                            <div class="flex items-center space-x-3.5">
+                                <div class="w-9 h-9 rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-house-medical"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-rose-500 transition-colors">Simulasikan Penyerahan Surat Izin Sakit</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-slate-400 text-3xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Smartphone mockup container right -->
+                <div class="flex justify-center" data-aos="fade-left">
+                    <div class="w-80 h-[580px] bg-slate-900 dark:bg-slate-950 rounded-[40px] border-4 border-slate-300 dark:border-slate-800 p-3 shadow-2xl relative overflow-hidden flex flex-col justify-between">
+                        <!-- Camera Notch -->
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 h-5 w-28 bg-slate-300 dark:bg-slate-800 rounded-b-xl z-20"></div>
+
+                        <!-- Mockup Screen App Header -->
+                        <div class="pt-6 pb-3 px-3 border-b border-white/5 bg-slate-800 dark:bg-slate-900 flex justify-between items-center">
+                            <span class="text-[10px] font-black text-primary-400"><i class="fa-solid fa-people-roof mr-1"></i> iMersKORLAS</span>
+                            <span class="text-[9px] text-slate-300">Kelas 1-A Rombel</span>
+                        </div>
+
+                        <!-- Screen Content Area -->
+                        <div class="flex-grow p-4 bg-slate-900 dark:bg-slate-950 overflow-y-auto space-y-4" id="phone-screen-content">
+                            <!-- Default State -->
+                            <div class="text-center py-20" id="phone-default-state">
+                                <i class="fa-solid fa-mobile-screen-button text-4xl text-slate-600 animate-bounce"></i>
+                                <h5 class="text-xs font-bold text-slate-300 mt-4">Pilih Tombol di Sebelah Kiri</h5>
+                                <p class="text-[10px] text-slate-500 mt-1 max-w-xs mx-auto">Saksikan alur masuk notifikasi WhatsApp Gateway, kuitansi kas otomatis, dan data absensi digital.</p>
+                            </div>
+                        </div>
+
+                        <!-- Home Bar bottom -->
+                        <div class="h-1.5 w-28 bg-slate-600 rounded-full mx-auto my-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+       PRICING SECTION (RE-DESIGNED STUNNING PREMIUM GLASSMORPHIC CARD)
+       ========================================== -->
+    <section class="py-24 relative overflow-hidden" id="pricing">
+        <!-- Ambient Background Glow behind the card -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-gradient-to-tr from-primary-500 to-indigo-500 rounded-full blur-[120px] opacity-20 dark:opacity-30 -z-10 animate-pulse"></div>
+
+        <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
+            <div class="max-w-3xl mx-auto mb-16">
+                <span class="text-primary-600 dark:text-primary-400 font-extrabold text-xs uppercase tracking-widest block mb-2">Penawaran Spesial</span>
+                <h2 class="text-3xl md:text-5xl font-black text-slate-900 dark:text-white leading-tight">Skema Investasi & Lisensi</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm mt-3 leading-relaxed">Nikmati seluruh kelengkapan fitur koordinasi tanpa biaya bulanan tersembunyi, terintegrasi langsung dengan database Google Sheets sekolah Anda.</p>
+            </div>
+
+            <!-- Single Premium Pricing Card -->
+            <div class="max-w-md mx-auto bg-white/75 dark:bg-slate-900/60 backdrop-blur-xl border-2 border-primary-500/30 dark:border-primary-400/30 p-8 md:p-10 rounded-[40px] shadow-2xl relative transition-all hover:scale-[1.02] duration-300 glow-blue animate-fade-in" data-aos="zoom-in">
+                <!-- Glowing badge -->
+                <span class="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 text-white font-black rounded-full text-[10px] uppercase tracking-widest shadow-lg shadow-orange-500/30 animate-bounce">
+                    🚀 PROMO TERBATAS
+                </span>
+                
+                <h4 class="text-primary-600 dark:text-primary-400 font-black text-xs uppercase tracking-widest mb-2">Premium SaaS Lifetime</h4>
+                <div class="flex items-baseline justify-center my-4">
+                    <span class="text-slate-500 dark:text-slate-400 text-xl font-bold mr-1">Rp</span>
+                    <span class="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-indigo-600 to-purple-600 dark:from-white dark:to-slate-200 tracking-tighter">0</span>
+                    <span class="text-slate-500 dark:text-slate-400 text-sm font-bold ml-2">/ Selamanya</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-400 text-xs mt-4 leading-relaxed">Dapatkan lisensi aplikasi **100% gratis** selama masa pengenalan sistem untuk sekolah Anda. Cukup ikuti saluran WhatsApp resmi Terry Katar!</p>
+
+                <!-- Features list in card -->
+                <ul class="space-y-4 text-left text-xs text-slate-700 dark:text-slate-300 mt-8 mb-8 border-t border-slate-200/50 dark:border-white/5 pt-6">
+                    <li class="flex items-center space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 text-[10px]">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span class="font-semibold">Koneksi Anggota & Siswa Tanpa Batas</span>
+                    </li>
+                    <li class="flex items-center space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 text-[10px]">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span class="font-semibold">Manajemen Kas & Iuran Real-time</span>
+                    </li>
+                    <li class="flex items-center space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 text-[10px]">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span class="font-semibold">Papan Informasi & Pengumuman Penting</span>
+                    </li>
+                    <li class="flex items-center space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 text-[10px]">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span class="font-semibold">Fitur Polling & Jajak Pendapat Kelas</span>
+                    </li>
+                    <li class="flex items-center space-x-3">
+                        <div class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 text-[10px]">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <span class="font-semibold">Penyimpanan Google Sheets Mandiri</span>
+                    </li>
+                </ul>
+
+                <button onclick="location.href='https://whatsapp.com/channel/0029VbDRNxR6BIErgr6SdJ1p'" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-sm py-4 rounded-2xl shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all hover:scale-[1.03] active:scale-[0.98] flex items-center justify-center space-x-2.5 cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-xl animate-pulse"></i>
+                    <span>Gabung & Ambil Lisensi Gratis</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+       FOOTER
+       ========================================== -->
+    <footer class="border-t border-slate-200/50 dark:border-white/5 bg-slate-100/50 dark:bg-primary-950/40 py-12 text-slate-500 dark:text-slate-500 text-xs">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center text-white text-base">
+                    <i class="fa-solid fa-people-roof"></i>
+                </div>
+                <div>
+                    <h5 class="text-slate-900 dark:text-white font-extrabold text-sm">iMersKORLAS</h5>
+                    <p class="text-3xs text-slate-400 dark:text-slate-500">Terhubung. Terorganisir. Transparan.</p>
+                </div>
+            </div>
+
+            <!-- Copyright and Developer link -->
+            <div class="text-center md:text-right space-y-1">
+                <p class="font-medium text-slate-600 dark:text-slate-400">&copy; 2026 iMersKORLAS. Hak Cipta Dilindungi Undang-Undang.</p>
+                <p class="text-3xs">Developed by <a href="https://imersnesia.com" target="_blank" class="hover:text-primary-600 dark:hover:text-primary-400 font-extrabold underline transition-colors">Terry Katar | iMersnesia.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+       JAVASCRIPT LOGIC
+       ========================================== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            AOS.init({ duration: 800, once: true });
+            initTheme();
+        });
+
+        // Initialize theme on landing page from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem("imers_theme") || "dark"; // Defaulting to premium dark mode look
+            if (savedTheme === "dark") {
+                document.documentElement.classList.add("dark");
+            } else {
+                document.documentElement.classList.remove("dark");
+            }
+            updateThemeToggleIcon(savedTheme);
+        }
+
+        // Toggle Dark/Light Mode on Landing Page
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.contains("dark");
+            if (isDark) {
+                document.documentElement.classList.remove("dark");
+                localStorage.setItem("imers_theme", "light");
+                updateThemeToggleIcon("light");
+            } else {
+                document.documentElement.classList.add("dark");
+                localStorage.setItem("imers_theme", "dark");
+                updateThemeToggleIcon("dark");
+            }
+        }
+
+        // Sync theme icons across selectors
+        function updateThemeToggleIcon(theme) {
+            const icons = document.querySelectorAll(".theme-toggle-icon");
+            icons.forEach(icon => {
+                if (theme === "dark") {
+                    icon.className = "fa-solid fa-sun text-amber-400 text-sm theme-toggle-icon";
+                } else {
+                    icon.className = "fa-solid fa-moon text-slate-600 text-sm theme-toggle-icon";
+                }
+            });
+        }
+
+        // Sticky Navbar effect on Scroll
+        window.addEventListener("scroll", () => {
+            const nav = document.getElementById("main-nav");
+            if (window.scrollY > 50) {
+                nav.classList.add("bg-white", "dark:bg-primary-950", "shadow-xl", "py-2");
+                nav.classList.remove("bg-white/70", "dark:bg-primary-950/80", "py-4");
+            } else {
+                nav.classList.add("bg-white/70", "dark:bg-primary-950/80", "py-4");
+                nav.classList.remove("bg-white", "dark:bg-primary-950", "shadow-xl", "py-2");
+            }
+        });
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const icon = document.getElementById("menu-btn-icon");
+            menu.classList.toggle("hidden");
+            if (menu.classList.contains("hidden")) {
+                icon.className = "fa-solid fa-bars text-xl";
+            } else {
+                icon.className = "fa-solid fa-xmark text-xl";
+            }
+        }
+
+        // Live Simulation Logic
+        function runSimulation(type) {
+            const screen = document.getElementById("phone-screen-content");
+            
+            if (type === 'iuran') {
+                screen.innerHTML = `
+                    <div class="space-y-4 animate-fade-in" data-aos="fade-up">
+                        <!-- Notification Badge -->
+                        <div class="bg-emerald-500/10 border border-emerald-500/30 p-3 rounded-2xl flex items-center space-x-3">
+                            <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i>
+                            <div>
+                                <h6 class="text-[10px] font-black text-emerald-400 uppercase tracking-wider">Notifikasi WhatsApp</h6>
+                                <p class="text-[9px] text-slate-300">Konfirmasi Setoran Kas dari Wali Murid berhasil diproses!</p>
+                            </div>
+                        </div>
+
+                        <!-- App Receipt Box -->
+                        <div class="glass-panel p-4 rounded-2xl space-y-3 bg-slate-900/80">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span class="text-slate-400 text-3xs font-extrabold uppercase">Bukti Penerimaan Kas</span>
+                                <span class="text-emerald-500 text-2xs font-extrabold">APPROVED</span>
+                            </div>
+                            <div class="space-y-1.5 text-2xs text-slate-200">
+                                <div class="flex justify-between"><span class="text-slate-400">Penyetor:</span> <span class="font-bold">Ayah Razan Al-Fatih</span></div>
+                                <div class="flex justify-between"><span class="text-slate-400">Jenis:</span> <span class="font-bold">Iuran Kas Bulanan</span></div>
+                                <div class="flex justify-between"><span class="text-slate-400">Nominal:</span> <span class="text-emerald-400 font-black">Rp 150.000</span></div>
+                            </div>
+                            <div class="pt-2 border-t border-white/5 text-center text-4xs text-slate-400">
+                                Pembukuan Kas Kelas Berhasil Diperbarui
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'polling') {
+                screen.innerHTML = `
+                    <div class="space-y-4 animate-fade-in" data-aos="fade-up">
+                        <!-- Notification Badge -->
+                        <div class="bg-indigo-500/10 border border-indigo-500/30 p-3 rounded-2xl flex items-center space-x-3">
+                            <i class="fa-brands fa-whatsapp text-indigo-400 text-lg"></i>
+                            <div>
+                                <h6 class="text-[10px] font-black text-indigo-400 uppercase tracking-wider">Notifikasi WhatsApp</h6>
+                                <p class="text-[9px] text-slate-300">Polling Keputusan dirilis: "Pilihan Warna Kaos Olahraga"</p>
+                            </div>
+                        </div>
+
+                        <!-- App Poll Screen -->
+                        <div class="glass-panel p-4 rounded-2xl space-y-3 bg-slate-900/80">
+                            <h5 class="text-xs font-extrabold text-white">Apakah Anda menyetujui opsi kaos olahraga berwarna Hijau Botol?</h5>
+                            <div class="space-y-2 text-2xs">
+                                <button class="w-full p-2 bg-primary-600/30 text-primary-300 hover:bg-primary-600/50 rounded-xl border border-primary-500/20 text-left font-bold transition-all flex justify-between items-center">
+                                    <span>Opsi A: Sangat Setuju</span> <span class="text-3xs text-primary-400">75% (15 Suara)</span>
+                                </button>
+                                <button class="w-full p-2 bg-white/5 text-slate-300 rounded-xl border border-white/5 text-left font-bold flex justify-between items-center">
+                                    <span>Opsi B: Butuh Desain Lain</span> <span class="text-3xs text-slate-500">25% (5 Suara)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'izin') {
+                screen.innerHTML = `
+                    <div class="space-y-4 animate-fade-in" data-aos="fade-up">
+                        <!-- Notification Badge -->
+                        <div class="bg-rose-500/10 border border-rose-500/30 p-3 rounded-2xl flex items-center space-x-3">
+                            <i class="fa-brands fa-whatsapp text-rose-400 text-lg"></i>
+                            <div>
+                                <h6 class="text-[10px] font-black text-rose-400 uppercase tracking-wider">Notifikasi WhatsApp</h6>
+                                <p class="text-[9px] text-slate-300">Konfirmasi Izin: Razan Al-Fatih hari ini sakit.</p>
+                            </div>
+                        </div>
+
+                        <!-- App Permission Card -->
+                        <div class="glass-panel p-4 rounded-2xl space-y-3 bg-slate-900/80">
+                            <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                                <span class="text-slate-400 text-3xs font-extrabold uppercase tracking-wider">Izin Absensi Siswa</span>
+                                <span class="px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded text-4xs font-bold uppercase tracking-wider">Sakit</span>
+                            </div>
+                            <div class="space-y-1 text-2xs text-slate-200">
+                                <p><strong class="text-white">Nama Siswa:</strong> Razan Al-Fatih</p>
+                                <p><strong class="text-white">Alasan:</strong> Demam Tinggi setelah imunisasi</p>
+                                <p class="text-slate-400 text-3xs italic mt-1">Surat keterangan dokter berhasil diunggah dalam database.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Play successful simulator alert sound effect simulation via Swal
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Simulasi Terkirim!',
+                text: 'Sistem berhasil mensimulasikan notifikasi iMersKORLAS.',
+                showConfirmButton: false,
+                timer: 2000,
+                background: document.documentElement.classList.contains('dark') ? '#111b33' : '#ffffff',
+                color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#1e293b',
+                iconColor: '#10b981'
+            });
+        }
+    </script>
+</body>
+</html>
